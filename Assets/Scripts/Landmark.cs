@@ -5,21 +5,27 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(TMP_Text))]
 public class Landmark : MonoBehaviour
 {
-	public float Radius = 3f;
-	public float Cooldown = 15f;
+	[Range(1, 10)] public float Radius = 3f;
+	[Range(1, 100)] public float Cooldown;
 	public float CurrentCooldown;
 
 	public Resource LandmarkResource;
 
 	private List<Group> ActiveGroups = new List<Group>();
-
 	private CircleCollider2D _triggerArea;
+	private TMP_Text timerText;
+	private MeshRenderer timerMesh;
+
 	private void Awake()
 	{
 		_triggerArea = GetComponent<CircleCollider2D>();
 		InitializeLandmark();
+
+		timerText = GetComponentInChildren<TMP_Text>();
+		timerMesh = GetComponentInChildren<MeshRenderer>();
 	}
 
 	private void InitializeLandmark()
@@ -94,6 +100,7 @@ public class Landmark : MonoBehaviour
 		if (CurrentCooldown <= 0)
 			OffCooldown();
 	}
+
 	private void OffCooldown()
 	{
 		CancelInvoke("UpdateCooldown");
@@ -103,10 +110,7 @@ public class Landmark : MonoBehaviour
 
 	private void UpdateTimer()
 	{
-		MeshRenderer TimerRendere = GetComponentInChildren<MeshRenderer>();
-		TextMeshPro textMeshPro = GetComponentInChildren<TextMeshPro>();
-		textMeshPro.text = CurrentCooldown.ToString();
-		TimerRendere.material.SetFloat("_Cutoff", (1 - CurrentCooldown / Cooldown));
-		Debug.Log("asjdhakjhdkajshd " + (1 - CurrentCooldown / Cooldown));
+		timerText.text = CurrentCooldown.ToString();
+		timerMesh.material.SetFloat("_Cutoff", (1 - CurrentCooldown / Cooldown));
 	}
 }

@@ -53,6 +53,6 @@ public class TeamInventoryUI : MonoBehaviour
 				break;
 		}
 
-		return Resources.Load<Sprite>($"Sprites/{spriteName}");
+		return Resources.Load<Sprite>($"Sprites/Glitch/{spriteName}");
 	}
 }

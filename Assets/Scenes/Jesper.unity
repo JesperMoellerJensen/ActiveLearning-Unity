@@ -1722,15 +1722,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3073595993526230168, guid: 603a0793f976e8845bea5e695253cf0d,
+    - target: {fileID: 4438310182177938654, guid: 603a0793f976e8845bea5e695253cf0d,
         type: 3}
-      propertyPath: CurrentCooldown
-      value: 0
+      propertyPath: m_AnchoredPosition.x
+      value: 0.017
       objectReference: {fileID: 0}
-    - target: {fileID: 3073595993526230168, guid: 603a0793f976e8845bea5e695253cf0d,
+    - target: {fileID: 4438310182177938654, guid: 603a0793f976e8845bea5e695253cf0d,
         type: 3}
-      propertyPath: Cooldown
-      value: 100
+      propertyPath: m_SizeDelta.x
+      value: 3.117
       objectReference: {fileID: 0}
     - target: {fileID: 6335840617716239030, guid: 603a0793f976e8845bea5e695253cf0d,
         type: 3}
@@ -1749,7 +1749,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5791131666728515926, guid: 603a0793f976e8845bea5e695253cf0d,
         type: 3}
-      propertyPath: m_inputSource
+      propertyPath: m_enableWordWrapping
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
