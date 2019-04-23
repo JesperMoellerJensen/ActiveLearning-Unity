@@ -1823,6 +1823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1736316635}
   - component: {fileID: 1736316636}
+  - component: {fileID: 1736316637}
   m_Layer: 0
   m_Name: Castle Image
   m_TagString: Untagged
@@ -1892,6 +1893,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &1736316637
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736316634}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1775587631
 GameObject:
   m_ObjectHideFlags: 0
