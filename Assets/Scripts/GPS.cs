@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class GPS : MonoBehaviour
 {
-
-	public static GPS Instance { get; set; }
-
 	private double startOffsetX = 55.40386792238677d;
 	private double startOffsetY = 10.379884476885422d;
 
 	public double latitude = 0;
 	public double longitude = 0;
 
-	public float GPSPositionMultiplier = 1;
-	public bool isUnityRemote;
+	public float Multiply = 100;
 
 	private Player _player;
-	private Vector2 startOffset;
 
 	private void Start()
 	{
@@ -31,6 +26,12 @@ public class GPS : MonoBehaviour
 		Input.location.Start(1f, 0.1f);
 	}
 
+	private void StopGPSService()
+	{
+		CancelInvoke("BeginUpdate");
+		Input.location.Stop();
+	}
+
 	private void BeginUpdate()
 	{
 		if (!Input.location.isEnabledByUser)
@@ -38,16 +39,15 @@ public class GPS : MonoBehaviour
 			print("GPS not enabled by user");
 			return;
 		}
-	}
 
 		switch (Input.location.status)
 		{
 			case LocationServiceStatus.Failed:
 				StartGPS();
-				print("Restarting");
+				Debug.Log("GPS Service Failed");
 				break;
 			case LocationServiceStatus.Initializing:
-				print("Initializing...");
+				Debug.Log("Initializing GPS Service");
 				break;
 			case LocationServiceStatus.Running:
 				UpdateLocation();
@@ -55,7 +55,7 @@ public class GPS : MonoBehaviour
 			case LocationServiceStatus.Stopped:
 				StartGPS();
 				//CancelInvoke("BeginUpdate");
-				print("Location service stopped");
+				Debug.Log("GPS Service Stopped");
 				break;
 		}
 	}
