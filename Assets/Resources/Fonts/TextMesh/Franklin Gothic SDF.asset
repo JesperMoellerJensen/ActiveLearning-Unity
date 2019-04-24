@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Franklin Gothic SDF
   m_EditorClassIdentifier: 
-  hashCode: 415625653
+  hashCode: -1008256172
   material: {fileID: 21123153788452614}
   materialHashCode: 594042814
   fontAssetType: 1

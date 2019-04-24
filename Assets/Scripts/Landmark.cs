@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
 [RequireComponent(typeof(TMP_Text))]
-public class Landmark : MonoBehaviour
+public class Landmark : MonoBehaviour, IInteractable
 {
 	[Range(1, 10)] public float Radius = 3f;
 	[Range(1, 100)] public float Cooldown;
@@ -14,36 +14,61 @@ public class Landmark : MonoBehaviour
 	public bool IsOnCooldown { get { return CurrentCooldown > 0; } }
 
 	public Resource LandmarkResource;
+	public List<TeamBehavior> TeamsOnLandmark = new List<TeamBehavior>();
 
-	private List<Group> ActiveGroups = new List<Group>();
+	private SpriteRenderer _sprite;
+
+	private TeamBehavior _activeTeam;
 	private CircleCollider2D _triggerArea;
-	private TMP_Text timerText;
-	private MeshRenderer timerMesh;
+	private TMP_Text _timerText;
+	private MeshRenderer _timerMesh;
 
 	private void Awake()
 	{
+		_sprite = GetComponent<SpriteRenderer>();
 		_triggerArea = GetComponent<CircleCollider2D>();
 		InitializeLandmark();
 
-		timerText = GetComponentInChildren<TMP_Text>();
-		timerMesh = GetComponentInChildren<MeshRenderer>();
+		_timerText = GetComponentInChildren<TMP_Text>();
+		_timerMesh = GetComponentInChildren<MeshRenderer>();
 	}
+
+	void OnTriggerEnter2D(Collider2D collision)
+	{
+		Player player = collision.gameObject.GetComponent<Player>();
+
+		List<Player> playersNotOnPoint = GetPlayersNotInRadius(transform.position, Radius, player.Team);
+		if (playersNotOnPoint.Count == 0)
+		{
+			TeamOnPoint(player.Team);
+		}
+		else
+		{
+			GroupNotOnPoint(playersNotOnPoint);
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D collision)
+	{
+		Player player = collision.gameObject.GetComponent<Player>();
+		TeamsOnLandmark.Remove(player.Team);
+
+		if (_activeTeam == player.Team)
+		{
+			GroupMemberLeavingActiveArea(player.Team, player);
+		}
+	}
+
 
 	private void InitializeLandmark()
 	{
 		LandmarkResource = (Resource)Random.Range(0, System.Enum.GetValues(typeof(Resource)).Length-1);
-		GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Glitch/" + LandmarkResource.ToString());
+		_sprite.sprite = Resources.Load<Sprite>("Sprites/Glitch/" + LandmarkResource.ToString());
 	}
 
-	private void GroupOnPoint(Group group)
+	private void TeamOnPoint(TeamBehavior team)
 	{
-		Debug.Log(string.Format("Everyone from group {0} is here", group.GroupId));
-		ActiveGroups.Add(group);
-
-		//TODO: Implement Questions
-		ActiveGroups.Remove(group);
-		Debug.Log("You got 1 " + LandmarkResource.ToString());
-		OnCooldown();
+		TeamsOnLandmark.Add(team);
 	}
 
 	private void GroupNotOnPoint(List<Player> players)
@@ -54,50 +79,35 @@ public class Landmark : MonoBehaviour
 		}
 	}
 
-	private void GroupMemberLeavingActiveArea(Group group, Player player)
+	private void GroupMemberLeavingActiveArea(TeamBehavior team, Player player)
 	{
-		Debug.Log(string.Format("Player {0} from group {1} has left the area, please return", player.Name, group.GroupId));
+		//TODO: Implement Popup when players are leaving landmark while active.
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	public List<Player> GetPlayersNotInRadius(Vector2 pointPos, float radius, TeamBehavior team)
 	{
-		if (IsOnCooldown)
+		List<Player> _players = team.Players;
+		List<Player> playersNotInRadius = new List<Player>();
+
+		foreach (var player in _players)
 		{
-			return;
+			if (Vector2.Distance(player.Position, pointPos) > radius + player.Radius)
+			{
+				playersNotInRadius.Add(player);
+			}
 		}
 
-		Player player = collision.gameObject.GetComponent<Player>();
-		Group group = GroupManager.GetGroupById(player.GroupId);
-
-		List<Player> playersNotOnPoint = group.GetPlayersNotInRadius(transform.position, Radius);
-		if (playersNotOnPoint.Count == 0)
-		{
-			GroupOnPoint(group);
-		}
-		else
-		{
-			GroupNotOnPoint(playersNotOnPoint);
-		}
-	}
-
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		Player player = collision.gameObject.GetComponent<Player>();
-		Group group = GroupManager.GetGroupById(player.GroupId);
-
-		if (ActiveGroups.Contains(group))
-		{
-			GroupMemberLeavingActiveArea(group, player);
-		}
+		return playersNotInRadius;
 	}
 
 	private void OnCooldown()
 	{
 		CurrentCooldown = Cooldown-0.001f;
-		timerMesh.enabled = true;
+		_timerMesh.enabled = true;
 		UpdateTimer();
 		InvokeRepeating("UpdateCooldown", 1, 1);
-		timerText.text = Cooldown.ToString();
+		_sprite.sprite = null;
+		_timerText.text = Cooldown.ToString();
 	}
 
 	private void UpdateCooldown()
@@ -112,14 +122,31 @@ public class Landmark : MonoBehaviour
 	{
 		InitializeLandmark();
 		CancelInvoke("UpdateCooldown");
-		timerText.text = "";
-		timerMesh.enabled = false;
+		_timerText.text = "";
+		_timerMesh.enabled = false;
 
 	}
 
 	private void UpdateTimer()
 	{
-		timerText.text = CurrentCooldown.ToString();
-		timerMesh.material.SetFloat("_Cutoff", (1 - CurrentCooldown / Cooldown));
+		_timerText.text = CurrentCooldown.ToString();
+		_timerMesh.material.SetFloat("_Cutoff", (1 - CurrentCooldown / Cooldown));
+	}
+
+	public void Interact(Player player)
+	{
+		if (TeamsOnLandmark.Contains(player.Team) && _activeTeam == null && IsOnCooldown == false)
+		{
+			_activeTeam = player.Team;
+			StartQuestion();
+		}
+	}
+
+	public void StartQuestion()
+	{
+		//TODO: Implement Questions
+		_activeTeam.AddResource(LandmarkResource);
+		_activeTeam = null;
+		OnCooldown();
 	}
 }

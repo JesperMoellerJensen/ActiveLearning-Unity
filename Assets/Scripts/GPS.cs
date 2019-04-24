@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GPS : MonoBehaviour
 {
+
 	public static GPS Instance { get; set; }
 
 	public Vector2 startOffset;
@@ -11,11 +12,14 @@ public class GPS : MonoBehaviour
 	public float latitude = 0;
 	public float longitude = 0;
 
+	public float Multiply = 100;
 	public bool isUnityRemote;
-	public bool First;
+
+	private Player _player;
 
 	private void Start()
 	{
+		_player = GetComponent<Player>();
 		InvokeRepeating("StartRotine", 0, 1);
 	}
 
@@ -74,8 +78,11 @@ public class GPS : MonoBehaviour
 	{
 		if (Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running)
 		{
-			latitude = startOffset.x - Input.location.lastData.latitude;
-			longitude = startOffset.y - Input.location.lastData.longitude;
+			latitude = (startOffset.x - Input.location.lastData.latitude) * Multiply;
+			longitude = (startOffset.y - Input.location.lastData.longitude) * Multiply;
+
+			_player.Position = new Vector2(latitude, longitude);
+			print(latitude + "," + longitude + "  |  " + startOffset);
 		}
 		else
 		{
