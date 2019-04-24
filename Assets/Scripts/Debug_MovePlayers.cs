@@ -6,14 +6,8 @@ public class Debug_MovePlayers : MonoBehaviour
 {
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+		if (Input.GetKeyDown(KeyCode.Mouse0))
 			MovePlayer(0);
-
-		if (Input.GetKeyDown(KeyCode.Alpha2))
-			MovePlayer(1);
-
-		if (Input.GetKeyDown(KeyCode.Alpha3))
-			MovePlayer(2);
 
 	}
 

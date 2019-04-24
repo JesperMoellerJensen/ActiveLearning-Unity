@@ -9,8 +9,6 @@ public class Debug_InitializeGame : MonoBehaviour
 	{
 		Group g1 = new Group { GroupId = 0 };
 		AddPlayerToGame("Benny", 0, g1);
-		AddPlayerToGame("Henry", 1, g1);
-		AddPlayerToGame("Bubber", 2, g1);
 
 
 		GroupManager.AddGroup(g1);

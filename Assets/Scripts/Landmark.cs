@@ -11,6 +11,7 @@ public class Landmark : MonoBehaviour
 	[Range(1, 10)] public float Radius = 3f;
 	[Range(1, 100)] public float Cooldown;
 	public float CurrentCooldown;
+	public bool IsOnCooldown { get { return CurrentCooldown > 0; } }
 
 	public Resource LandmarkResource;
 
@@ -30,8 +31,8 @@ public class Landmark : MonoBehaviour
 
 	private void InitializeLandmark()
 	{
-		LandmarkResource = (Resource)Random.Range(0, System.Enum.GetValues(typeof(Resource)).Length);
-		Debug.Log(LandmarkResource.ToString());
+		LandmarkResource = (Resource)Random.Range(0, System.Enum.GetValues(typeof(Resource)).Length-1);
+		GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Glitch/" + LandmarkResource.ToString());
 	}
 
 	private void GroupOnPoint(Group group)
@@ -60,6 +61,11 @@ public class Landmark : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		if (IsOnCooldown)
+		{
+			return;
+		}
+
 		Player player = collision.gameObject.GetComponent<Player>();
 		Group group = GroupManager.GetGroupById(player.GroupId);
 
@@ -87,24 +93,27 @@ public class Landmark : MonoBehaviour
 
 	private void OnCooldown()
 	{
-		CurrentCooldown = Cooldown;
+		CurrentCooldown = Cooldown-0.001f;
+		timerMesh.enabled = true;
+		UpdateTimer();
 		InvokeRepeating("UpdateCooldown", 1, 1);
-		Debug.Log("Landmark going on cooldown");
+		timerText.text = Cooldown.ToString();
 	}
 
 	private void UpdateCooldown()
 	{
-		CurrentCooldown--;
+		CurrentCooldown = Mathf.Round(CurrentCooldown-1);
 		UpdateTimer();
-		Debug.Log("Cooldown left: " + CurrentCooldown);
 		if (CurrentCooldown <= 0)
 			OffCooldown();
 	}
 
 	private void OffCooldown()
 	{
+		InitializeLandmark();
 		CancelInvoke("UpdateCooldown");
-		Debug.Log("Landmark not longer on cooldown");
+		timerText.text = "";
+		timerMesh.enabled = false;
 
 	}
 
