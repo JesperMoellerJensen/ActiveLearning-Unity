@@ -7,10 +7,11 @@ public class GPS : MonoBehaviour
 
 	public static GPS Instance { get; set; }
 
-	public Vector2 startOffset;
+	private double startOffsetX = 55.40386792238677d;
+	private double startOffsetY = 10.379884476885422d;
 
-	public float latitude = 0;
-	public float longitude = 0;
+	public double latitude = 0;
+	public double longitude = 0;
 
 	public float Multiply = 100;
 	public bool isUnityRemote;
@@ -20,73 +21,53 @@ public class GPS : MonoBehaviour
 	private void Start()
 	{
 		_player = GetComponent<Player>();
-		InvokeRepeating("StartRotine", 0, 1);
+		StartGPS();
+		InvokeRepeating("BeginUpdate", 0, 0.1f);
 	}
 
-	private void StartRotine()
+	private void StartGPS()
 	{
-		StartCoroutine(StartLocationService());
+		Input.location.Start(1f, 0.1f);
 	}
 
-	private IEnumerator StartLocationService()
+	private void BeginUpdate()
 	{
-		// Wait until the editor and unity remote are connected before starting a location service
-		if (isUnityRemote)
-		{
-			yield return new WaitForSeconds(3);
-		}
-
 		if (!Input.location.isEnabledByUser)
 		{
-			Debug.Log("User has not enabled GPS");
-			yield break;
+			print("GPS not enabled by user");
+			return;
 		}
 
-		Input.location.Start();
-		int maxWait = 20;
-		while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+		switch (Input.location.status)
 		{
-			yield return new WaitForSeconds(1);
-			maxWait--;
+			case LocationServiceStatus.Failed:
+				StartGPS();
+				print("Restarting");
+				break;
+			case LocationServiceStatus.Initializing:
+				print("Initializing...");
+				break;
+			case LocationServiceStatus.Running:
+				UpdateLocation();
+				break;
+			case LocationServiceStatus.Stopped:
+				StartGPS();
+				//CancelInvoke("BeginUpdate");
+				print("Location service stopped");
+				break;
 		}
-
-		if (maxWait <= 0)
-		{
-			Debug.Log("Timed Out");
-			yield break;
-		}
-
-		if (Input.location.status == LocationServiceStatus.Failed)
-		{
-			Debug.Log("Unable to get device location");
-			yield break;
-		}
-
-		if (startOffset.magnitude == 0)
-		{
-			startOffset = new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude);
-		}
-		else
-		{
-			UpdateLocation();
-		}
-
 	}
-
 
 	private void UpdateLocation()
 	{
-		if (Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running)
-		{
-			latitude = (startOffset.x - Input.location.lastData.latitude) * Multiply;
-			longitude = (startOffset.y - Input.location.lastData.longitude) * Multiply;
+		print("Update");
 
-			_player.Position = new Vector2(latitude, longitude);
-			print(latitude + "," + longitude + "  |  " + startOffset);
-		}
-		else
-		{
-			Debug.Log("No");
-		}
+		latitude = (startOffsetX - Input.location.lastData.latitude) * Multiply;
+		longitude = (startOffsetY - Input.location.lastData.longitude) * Multiply;
+
+		string lat = string.Format("{0:0.00}", latitude);
+		string lon = string.Format("{0:0.00}", longitude);
+
+		_player.Position = new Vector2((float)latitude, (float)longitude);
 	}
 }

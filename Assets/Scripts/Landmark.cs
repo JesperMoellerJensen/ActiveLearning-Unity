@@ -25,7 +25,7 @@ public class Landmark : MonoBehaviour, IInteractable
 
 	private void Awake()
 	{
-		_sprite = GetComponent<SpriteRenderer>();
+		_sprite = GetComponentsInChildren<SpriteRenderer>()[0];
 		_triggerArea = GetComponent<CircleCollider2D>();
 		InitializeLandmark();
 

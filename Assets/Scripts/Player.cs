@@ -59,7 +59,8 @@ public class Player : MonoBehaviour
 		if(Input.touchCount == 2)
 		{
 			Touch touch = Input.GetTouch(0);
-			Position = Camera.main.ScreenToWorldPoint(touch.position);
+			//if(touch.phase == TouchPhase.)
+			//Position = Camera.main.ScreenToWorldPoint(touch.position);
 		}
 	}
 }
