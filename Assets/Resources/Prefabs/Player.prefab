@@ -151,5 +151,5 @@ MonoBehaviour:
   startOffset: {x: 0, y: 0}
   latitude: 0
   longitude: 0
-  Multiply: 10000
+  Multiply: 50000
   isUnityRemote: 1
