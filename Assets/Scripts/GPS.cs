@@ -13,10 +13,11 @@ public class GPS : MonoBehaviour
 	public double latitude = 0;
 	public double longitude = 0;
 
-	public float Multiply = 100;
+	public float GPSPositionMultiplier = 1;
 	public bool isUnityRemote;
 
 	private Player _player;
+	private Vector2 startOffset;
 
 	private void Start()
 	{
@@ -37,6 +38,7 @@ public class GPS : MonoBehaviour
 			print("GPS not enabled by user");
 			return;
 		}
+	}
 
 		switch (Input.location.status)
 		{
