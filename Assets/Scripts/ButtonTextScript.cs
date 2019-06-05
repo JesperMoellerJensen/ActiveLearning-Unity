@@ -40,17 +40,33 @@ public class ButtonTextScript : MonoBehaviour
 
 	private void OnMouseOver()
 	{
-		_text.fontSize = hoverSize;
+		if(hoverSize > 0)
+		{
+			_text.fontSize = hoverSize;
+		}
 	}
 
 	private void OnMouseExit()
 	{
-		_text.fontSize = fontSize;
+		if (hoverSize > 0)
+		{
+			_text.fontSize = fontSize;
+		}
 	}
 
 	private void OnMouseDown()
 	{
 		onClick.Invoke();
+	}
+
+	public void SetText(string text)
+	{
+		_text.text = text;
+	}
+
+	public string GetText()
+	{
+		return _text.text;
 	}
 
 	// Update is called once per frame

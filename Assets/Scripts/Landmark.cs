@@ -23,6 +23,8 @@ public class Landmark : MonoBehaviour, IInteractable
 	private TMP_Text _timerText;
 	private MeshRenderer _timerMesh;
 
+	private QuestionUI _question;
+
 	private void Awake()
 	{
 		_sprite = GetComponentsInChildren<SpriteRenderer>()[0];
@@ -144,9 +146,25 @@ public class Landmark : MonoBehaviour, IInteractable
 
 	public void StartQuestion()
 	{
-		//TODO: Implement Questions
-		_activeTeam.AddResource(LandmarkResource);
-		_activeTeam = null;
-		OnCooldown();
+		_activeTeam.CanMove = false;
+
+		QuestionUI question = Instantiate(Resources.Load<GameObject>("Prefabs/Question"), GameObject.FindGameObjectWithTag("Canvas").transform).GetComponent<QuestionUI>();
+
+		question.transform.position = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width / 2, Screen.height / 2));
+		question.resourceType = LandmarkResource;
+
+		question.onCorrectAnswer.AddListener(delegate ()
+		{
+			_activeTeam.AddResource(LandmarkResource);
+		});
+
+		question.onDone.AddListener(delegate ()
+		{
+			_activeTeam.CanMove = true;
+			_activeTeam = null;
+			OnCooldown();
+			Destroy(question.gameObject);
+		});
+
 	}
 }

@@ -12,6 +12,7 @@ public class TeamBehavior : MonoBehaviour
 	public List<Resource> inventory;
 
 	public int TeamId;
+	public bool CanMove = true;
 
 	public List<Player> Players { get; private set; }
 

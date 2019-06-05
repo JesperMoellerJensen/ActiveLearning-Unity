@@ -31,6 +31,11 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
+		if(!Team.CanMove)
+		{
+			return;
+		}
+
 		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
 			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
