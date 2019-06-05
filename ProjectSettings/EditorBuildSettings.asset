@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Martin.unity
+    path: Assets/Scenes/LoginScreen.unity
+    guid: 472867e58e3fb7e4ea5d200601256f0f
+  - enabled: 1
+    path: Assets/Scenes/PlayerScreen.unity
+    guid: c501cd58ea171ac44b806db7e0198911
+  - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: 3841f8193f079404f8bdb2fe42a7432e
+  - enabled: 1
+    path: Assets/Scenes/CastleRun.unity
     guid: 3ff00a695116651419c4bbd79eaa526e
   m_configObjects: {}
