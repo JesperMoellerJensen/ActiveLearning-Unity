@@ -19,6 +19,6 @@ public class Debug_MovePlayers : MonoBehaviour
 
 		Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-		player.Position = mousePos;
+		player.TargetPosition = mousePos;
 	}
 }

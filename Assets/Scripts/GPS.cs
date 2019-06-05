@@ -70,6 +70,6 @@ public class GPS : MonoBehaviour
 		string lat = string.Format("{0:0.00}", latitude);
 		string lon = string.Format("{0:0.00}", longitude);
 
-		_player.Position = new Vector2((float)latitude, (float)longitude);
+		_player.TargetPosition = new Vector2((float)latitude, (float)longitude);
 	}
 }

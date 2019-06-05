@@ -51,6 +51,8 @@ MonoBehaviour:
   Team: {fileID: 0}
   Name: 
   Radius: 0
+  PositionLerpSpeed: 0.2
+  TargetPosition: {x: 0, y: 0}
 --- !u!58 &4157578098765178722
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -151,4 +153,3 @@ MonoBehaviour:
   latitude: 0
   longitude: 0
   Multiply: 50000
-  isUnityRemote: 1
