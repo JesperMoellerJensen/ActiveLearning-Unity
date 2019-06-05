@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
 	public TeamBehavior Team;
 	public string Name;
 	public float Radius;
-
+	public float PositionLerpSpeed;
+	public Vector2 TargetPosition;
 	public Vector2 Position
 	{
 		get { return _position; }
@@ -67,5 +68,13 @@ public class Player : MonoBehaviour
 			//if(touch.phase == TouchPhase.)
 			//Position = Camera.main.ScreenToWorldPoint(touch.position);
 		}
+
+		SetTargetPosition();
+
+	}
+
+	public void SetTargetPosition()
+	{
+		Position = Vector2.MoveTowards(Position, TargetPosition, PositionLerpSpeed);
 	}
 }
