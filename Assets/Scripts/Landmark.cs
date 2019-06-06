@@ -148,9 +148,7 @@ public class Landmark : MonoBehaviour, IInteractable
 	{
 		_activeTeam.CanMove = false;
 
-		QuestionUI question = Instantiate(Resources.Load<GameObject>("Prefabs/Question"), GameObject.FindGameObjectWithTag("Canvas").transform).GetComponent<QuestionUI>();
-
-		question.transform.position = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width / 2, Screen.height / 2));
+		QuestionUI question = QuestionUI.CreateQuestion();
 		question.resourceType = LandmarkResource;
 
 		question.onCorrectAnswer.AddListener(delegate ()

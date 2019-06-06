@@ -23,15 +23,14 @@ public class ButtonTextScript : MonoBehaviour
 		{
 			onClick = new UnityEvent();
 		}
+
+		_text = GetComponent<TMP_Text>();
+		_collider = GetComponent<BoxCollider2D>();
 	}
 
 	
 	void Start()
     {
-		
-		_text = GetComponent<TMP_Text>();
-		_collider = GetComponent<BoxCollider2D>();
-
 		fontSize = _text.fontSize;
 		_textcolor = _text.color;
 		_collider.size = _text.rectTransform.sizeDelta;

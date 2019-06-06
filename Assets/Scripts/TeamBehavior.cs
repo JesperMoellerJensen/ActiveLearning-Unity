@@ -14,6 +14,8 @@ public class TeamBehavior : MonoBehaviour
 	public int TeamId;
 	public bool CanMove = true;
 
+	public int nextQuestionIndex = 0;
+
 	public List<Player> Players { get; private set; }
 
 	void Awake()
